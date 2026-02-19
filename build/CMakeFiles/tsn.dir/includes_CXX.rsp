@@ -1,0 +1,1 @@
+-isystem C:/Python312/Include -isystem "C:/Python312/Lib/site-packages/pybind11/include"
