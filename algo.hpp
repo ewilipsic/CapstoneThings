@@ -20,6 +20,8 @@ typedef struct AlgoResults{
     std::vector<std::vector<int>> amount_sent;
     std::map<std::pair<int,int>,std::vector<std::vector<int>>> R; // pair(sorted msgidx,rep) -> routes
     std::map<std::pair<int,int>,std::vector<int>> departure_times; // pair(sorted msgidx,rep) -> depatrues of each disjoint
+    std::vector<std::vector<int>> W;
+    int Cost;
 
 } AlgoResults;
 

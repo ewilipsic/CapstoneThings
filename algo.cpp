@@ -32,9 +32,13 @@ int assignMessage(Message& msg,vector<int>& route,int start_time,int end_time,ma
     return 0;
 }
 
-int nextUpgradeCost(int rank,int limit){
-    if(rank == limit) return INT32_MAX;
-    return rank + 1;
+int nextUpgradeCost(int rank){
+    return 2;
+}
+
+int CumulativeUpgradeCost(int rank){
+    if (rank == 0) return 0;
+    return nextUpgradeCost(rank - 1) + CumulativeUpgradeCost(rank-1);
 }
 
 void updateWeights(int num_ecu,int num_bridges,vector<int>& route,vector<vector<int>>& W,vector<vector<int>>& Wm,vector<int>& node_rank,int Bridge_Limit = 3,int link_build_cost = 2){
@@ -55,12 +59,19 @@ void updateWeights(int num_ecu,int num_bridges,vector<int>& route,vector<vector<
     for(int i = 0;i<route.size();i++){
 
         int node = route[i];
+        int next_cost;
         // this price is arbitary
-        int next_cost = (node_rank[node] < Bridge_Limit)? nextUpgradeCost(node_rank[node],Bridge_Limit) + link_build_cost : INT32_MAX;
+        int src_cost = (node_rank[node] < Bridge_Limit)? nextUpgradeCost(node_rank[node]) + link_build_cost : INT32_MAX;
         for(int j = 0;j<num_ecu+num_bridges;j++){
             if(j == node || W[node][j] == 0) continue;
+            int dest_cost = (node_rank[j] < Bridge_Limit)? nextUpgradeCost(node_rank[j]) : INT32_MAX;
+            if (src_cost == INT32_MAX || dest_cost == INT32_MAX) next_cost = INT32_MAX;
+            else next_cost = dest_cost + src_cost;
+
             W[node][j] = next_cost;
             W[j][node] = next_cost;
+
+            // since Wm has infs for disjointness
             Wm[node][j] = max(Wm[node][j],next_cost);
             Wm[j][node] = max(Wm[node][j],next_cost);
         }
@@ -69,7 +80,7 @@ void updateWeights(int num_ecu,int num_bridges,vector<int>& route,vector<vector<
 
 AlgoResults algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_limit = 3,int link_build_cost = 2,int verbose = 0){
 
-    vector<vector<int>> W(num_ecu+num_bridges,vector<int>(num_bridges + num_ecu,1));
+    vector<vector<int>> W(num_ecu+num_bridges,vector<int>(num_bridges + num_ecu,1   ));
     vector<int> node_rank(num_ecu+num_bridges,0);
     for(int i = 0;i < num_bridges+num_ecu;i++) W[i][i] = INT32_MAX;
     
@@ -170,6 +181,16 @@ AlgoResults algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_limit 
     }
     }
 
+    int topologyCost = 0;
+    for(int i = 0;i<num_ecu+num_bridges;i++){
+        for(int j = 0;j<num_ecu+num_bridges;j++){
+            if(W[i][j] == 0) topologyCost += link_build_cost;
+        }
+    }
+    topologyCost = topologyCost/2;
+    for(int i = 0;i<num_ecu+num_bridges;i++) topologyCost += CumulativeUpgradeCost(node_rank[i]);
+
+
 
     if(verbose){
         for(Message m : M){
@@ -180,6 +201,8 @@ AlgoResults algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_limit 
             cout<<"TL: "<<m.tl<<"\n";
         }
         cout<<"\n";
+        
+        cout<<"TopologyCost: "<<topologyCost<<"\n";
 
         for(int i = 0;i<M.size();i++){
             for(int rep = 0; rep< repeats[i];rep++){
@@ -196,7 +219,7 @@ AlgoResults algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_limit 
         }
     }
 
-    AlgoResults ret = {hyper_period,repeats,amount_sent,R,departure_times};
+    AlgoResults ret = {hyper_period,repeats,amount_sent,R,departure_times,W,topologyCost};
     return ret;
 
 }
@@ -212,7 +235,9 @@ void algo_bind(py::module_ &m) {
         .def_readwrite("reps", &AlgoResults::reps)
         .def_readwrite("amount_sent", &AlgoResults::amount_sent)
         .def_readwrite("R", &AlgoResults::R)
-        .def_readwrite("departure_times", &AlgoResults::departure_times);
+        .def_readwrite("departure_times", &AlgoResults::departure_times)
+        .def_readwrite("W", &AlgoResults::W)
+        .def_readwrite("Cost", &AlgoResults::Cost);
 
     m.def("algo", &algo,
     py::return_value_policy::take_ownership,

@@ -16,16 +16,17 @@ int random_choice(const std::vector<int>& population, const std::vector<double>&
     return population[index];
 }
 
-vector<Message> makeInputs(int num_ecu = 5,
-                int num_bridges = 5,
-                int num_messages = 5,
-                int min_period = 2,
-                int max_period = 4,
-                int min_size = 1,
-                int max_size = 2,
-                int min_tl = 1,
-                int max_tl = 2,
-                int seed = 42){
+vector<Message> makeInputs(int num_ecu,
+                int num_bridges,
+                int num_messages,
+                int base_period,
+                std::vector<int> period_choice,
+                std::vector<double> period_choice_weights,
+                int min_size,
+                int max_size,
+                int min_tl,
+                int max_tl,
+                int seed){
 
     std::srand(seed); 
 
@@ -38,7 +39,7 @@ vector<Message> makeInputs(int num_ecu = 5,
         int src = rand()%num_ecu;
         int sink = src; while(sink == src) sink = rand()%num_ecu;
         int size = (min_size == max_size) ? min_size : rand() % (max_size - min_size) + min_size;
-        int period = (min_period == max_period) ? min_period : random_choice({1,2,3,10},{0.1,0.15,0.20,0.65}) * min_period;
+        int period = random_choice(period_choice,period_choice_weights) * base_period;
         int tl = (min_tl == max_tl) ? min_tl : rand() % (max_tl - min_tl) + min_tl;
 
         M[i] = {src,sink,size,period,tl};
@@ -57,6 +58,7 @@ vector<Message> makeInputs(int num_ecu = 5,
 
 void make_inputs(py::module_ &m) {
     py::bind_vector<std::vector<Message>>(m, "VectorMessage");
+    py::bind_vector<std::vector<double>>(m, "Vectordouble");
     py::class_<Message>(m, "Message")
         .def(py::init<int,int,int,int,int>())
         .def_readwrite("src", &Message::src)
@@ -68,16 +70,17 @@ void make_inputs(py::module_ &m) {
 
     m.def("makeInputs", &makeInputs,
           py::return_value_policy::take_ownership,
-          py::arg("num_ecu") = 5,
-          py::arg("num_bridges") = 5,
-          py::arg("num_messages") = 5,
-          py::arg("min_period") = 2,
-          py::arg("max_period") = 4,
-          py::arg("min_size") = 1,
-          py::arg("max_size") = 2,
-          py::arg("min_tl") = 1,
-          py::arg("max_tl") = 2,
-          py::arg("seed") = 42);
+          py::arg("num_ecu"),
+          py::arg("num_bridges"),
+          py::arg("num_messages"),
+          py::arg("base_period"),
+          py::arg("period_choice"),
+          py::arg("period_choice_weights"),
+          py::arg("min_size"),
+          py::arg("max_size"),
+          py::arg("min_tl"),
+          py::arg("max_tl"),
+          py::arg("seed"));
 }
 
 
