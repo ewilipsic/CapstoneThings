@@ -1,15 +1,12 @@
 #include"make_inputs.hpp"
 
 
-int random_choice(const std::vector<int>& population, const std::vector<double>& weights) {
+int random_choice(const std::vector<int>& population, const std::vector<double>& weights, std::mt19937& gen) {
     if (population.empty() || population.size() != weights.size()) {
         throw std::runtime_error("Population and weights must have same size and be non-empty");
     }
     
-    static thread_local std::random_device rd;
-    static thread_local std::mt19937 gen(rd());
-    
-    // Use std::discrete_distribution for weighted selection
+    // Use the seeded generator passed from makeInputs
     std::discrete_distribution<size_t> dist(weights.begin(), weights.end());
     size_t index = dist(gen);
     
@@ -28,33 +25,28 @@ vector<Message> makeInputs(int num_ecu,
                 int max_tl,
                 int seed){
 
-    std::srand(seed); 
+    std::srand(seed); // Seeds the standard rand()
+    std::mt19937 gen(seed); // Seeds the mt19937 generator
 
-    /*
-        ECU's are numbered 0 to num_ecu - 1;
-        Bridges are numbered num_ecu to num_ecu + num_bridges - 1
-    */
     vector<Message> M(num_messages);
     for(int i = 0;i<num_messages;i++){
         int src = rand()%num_ecu;
         int sink = src; while(sink == src) sink = rand()%num_ecu;
-        int size = (min_size == max_size) ? min_size : rand() % (max_size - min_size) + min_size;
-        int period = random_choice(period_choice,period_choice_weights) * base_period;
-        int tl = (min_tl == max_tl) ? min_tl : rand() % (max_tl - min_tl) + min_tl;
+        
+        int range = max_size - min_size;
+        int size = (range <= 0) ? min_size : (rand() % range) + min_size;
+        
+        // Pass the seeded generator here
+        int period = random_choice(period_choice, period_choice_weights, gen) * base_period;
+        
+        int tl_range = max_tl - min_tl;
+        int tl = (tl_range <= 0) ? min_tl : (rand() % tl_range) + min_tl;
 
         M[i] = {src,sink,size,period,tl};
     }
     
-    sort(M.begin(),M.end(),
-    [&](const Message& m1,const Message& m2){
-        if(m1.period < m2.period) return true;
-        if(m1.size > m2.size) return true;
-        return false;
-    });
-    
     return M;
 }
-
 
 void make_inputs(py::module_ &m) {
     py::bind_vector<std::vector<Message>>(m, "VectorMessage");
@@ -69,7 +61,7 @@ void make_inputs(py::module_ &m) {
         .def("__repr__",&Message::to_string);
 
     m.def("makeInputs", &makeInputs,
-          py::return_value_policy::take_ownership,
+        //   py::return_value_policy::take_ownership,
           py::arg("num_ecu"),
           py::arg("num_bridges"),
           py::arg("num_messages"),

@@ -19,10 +19,7 @@ vector<int> return_shortest_path(int n,vector<vector<int>>& adj,int source,int s
        
         
         for(int i = 0;i<n;i++){
-            // cout<<node<<" "<<i<<endl;
-            // cout<<adj.size()<<endl;;
-            // cout<<adj[0].size()<<endl;
-            // cout<<adj[node][i]<<endl;
+            cout<<node<<"#"<<i<<endl;
             if(adj[node][i] == INT32_MAX) continue;
             if(min_dist[i] > dist + adj[i][node]){
                 min_dist[i]  = dist + adj[i][node];
@@ -97,6 +94,8 @@ void yens(int n,
     int& key,
     map<int,vector<int>>& B_paths){
 
+    cout<<K<<endl;
+
     if(K == 0){
         int cost;
         A = return_shortest_path(n,adj,source,sink,cost);
@@ -157,44 +156,44 @@ void print_vec(vector<int>& arr){
     cout<<endl;
 }
 
-// int main(){
-//     int n = 5;
-//     vector<vector<int>> adj = {
-//         {INT32_MAX,2,1,INT32_MAX,INT32_MAX},
-//         {2,INT32_MAX,INT32_MAX,2,1},
-//         {1,INT32_MAX,INT32_MAX,1,INT32_MAX},
-//         {INT32_MAX,2,1,INT32_MAX,5},
-//         {INT32_MAX,1,INT32_MAX,5,INT32_MAX},
-//     };
-//     int source = 0;
-//     int sink = 4;
-//     int K = 0;
-//     vector<int> A;
-//     int prev_cost = 0;
-//     int prev_spuridx = 0;
-//     priority_queue<pair<int,int>,vector<pair<int,int>>,std::greater<pair<int,int>>> B_queue;
-//     unordered_map<int,int> B_spuridx;
-//     int key = 0;
-//     unordered_map<int,vector<int>> B_paths;
+int main(){
+    int n = 4;
+    vector<vector<int>> adj = {
+        {INT32_MAX,1,1,1},
+        {1,INT32_MAX,INT32_MAX,1},
+        {1,INT32_MAX,INT32_MAX,1,},
+        {1,1,1,INT32_MAX}
+    };
 
-//     while(prev_cost != INT32_MAX){
-//         yens(
-//         n,
-//         adj,source,sink,K,
-//         A,
-//         prev_cost,
-//         prev_spuridx,
-//         B_queue,
-//         B_spuridx,
-//         key,
-//         B_paths);
+    int source = 0;
+    int sink = 3;
+    int K = 0;
+    vector<int> A = {};
+    int prev_cost = 0;
+    int prev_spuridx = -1;
+    priority_queue<pair<int,int>,vector<pair<int,int>>,std::greater<pair<int,int>>> B_queue;
+    map<int,int> B_spuridx;
+    int key = 0;
+    map<int,vector<int>> B_paths;
 
-//         K++;
+    while(prev_cost != INT32_MAX){
+        yens(
+        n,
+        adj,source,sink,K,
+        A,
+        prev_cost,
+        prev_spuridx,
+        B_queue,
+        B_spuridx,
+        key,
+        B_paths);
+
+        K++;
 
         
-//         cout<<"Cost "<<prev_cost<<endl;
-//         cout<<"Path: ";
-//         print_vec(A);
+        cout<<"Cost "<<prev_cost<<endl;
+        cout<<"Path: ";
+        print_vec(A);
     
-//     }
-// }
+    }
+}

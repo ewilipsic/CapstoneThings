@@ -98,8 +98,11 @@ int nextUpgradeCost(int rank){
 }
 
 int CumulativeUpgradeCost(int rank){
-    if (rank == 0) return 0;
-    return nextUpgradeCost(rank - 1) + CumulativeUpgradeCost(rank-1);
+    int cost = 0;
+    for(int i = 0; i < rank; i++){
+        cost += nextUpgradeCost(i);
+    }
+    return cost;
 }
 
 void updateWeights(int num_ecu,int num_bridges,vector<int>& route,vector<vector<int>>& W,vector<vector<int>>& Wm,vector<int>& node_rank,int Bridge_Limit = 3,int link_build_cost = 2){
@@ -154,14 +157,12 @@ AlgoResults algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_limit,
         repeats[i] = hyper_period/M[i].period;
     }
     
-    /* Sorting is also done by make_inputs to make life easier */
     sort(M.begin(),M.end(),
     [&](const Message& m1,const Message& m2){
-        if(m1.period < m2.period) return true;
-        if(m1.size > m2.size) return true;
-        return false;
+        if(m1.period != m2.period) return m1.period < m2.period;
+        return m1.size > m2.size;
     });
-    
+
     vector<vector<int>> amount_sent(M.size());
     for(int i = 0;i<M.size();i++){
         amount_sent[i] = vector<int>(repeats[i],0);
@@ -214,7 +215,7 @@ AlgoResults algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_limit,
                 );
                 k = k + 1;
                 if(debug_print) cout<<"YENS OUT"<<endl;
-                if(prev_cost == INT32_MAX || k >= 100){
+                if(prev_cost == INT32_MAX){
                     prev_cost = INT32_MAX;
                     // cout<<"yen break"<<endl;
                     break;
@@ -319,7 +320,7 @@ void algo_bind(py::module_ &m) {
     return algo(num_ecu, num_bridges, M, Bridge_limit, 
                 link_build_cost, assignment_type, verbose, debug_print);
     },
-    py::return_value_policy::take_ownership,
+    // py::return_value_policy::take_ownership,
     py::arg("num_ecu"),
     py::arg("num_bridges"),
     py::arg("MessageVector"),
