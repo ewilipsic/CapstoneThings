@@ -142,7 +142,7 @@ void updateWeights(int num_ecu,int num_bridges,vector<int>& route,vector<vector<
     }
 };
 
-AlgoResults algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_limit,int link_build_cost,int assignment_type,int verbose,int debug_print){
+AlgoResults algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_limit,int link_build_cost,int yens_kmax,int assignment_type,int verbose,int debug_print){
 
     if(debug_print) cout<<"ALGO IN"<<endl;
     vector<vector<int>> W(num_ecu+num_bridges,vector<int>(num_bridges + num_ecu,1));
@@ -215,7 +215,7 @@ AlgoResults algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_limit,
                 );
                 k = k + 1;
                 if(debug_print) cout<<"YENS OUT"<<endl;
-                if(prev_cost == INT32_MAX){
+                if(prev_cost == INT32_MAX || k > yens_kmax){
                     prev_cost = INT32_MAX;
                     // cout<<"yen break"<<endl;
                     break;
@@ -241,7 +241,6 @@ AlgoResults algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_limit,
         
         R[{msg,rep}] = Rm;
         departure_times[{msg,rep}] = deps;
-        
     }
     }
 
@@ -292,6 +291,64 @@ AlgoResults algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_limit,
     
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void algo_bind(py::module_ &m) {
     py::bind_vector<std::vector<int>>(m, "VectorInt");
     py::bind_vector<std::vector<std::vector<int>>>(m, "VectorVectorInt");
@@ -308,7 +365,7 @@ void algo_bind(py::module_ &m) {
         .def_readwrite("Cost", &AlgoResults::Cost);
 
     m.def("algo", [](int num_ecu, int num_bridges, vector<Message> M, 
-                 int Bridge_limit, int link_build_cost, 
+                 int Bridge_limit, int link_build_cost,int yens_kmax, 
                  int assignment_type, int verbose, int debug_print) {
     
     // This guard redirects std::cout to sys.stdout while this lambda is executing
@@ -318,7 +375,7 @@ void algo_bind(py::module_ &m) {
     );
 
     return algo(num_ecu, num_bridges, M, Bridge_limit, 
-                link_build_cost, assignment_type, verbose, debug_print);
+                link_build_cost, yens_kmax, assignment_type, verbose, debug_print);
     },
     // py::return_value_policy::take_ownership,
     py::arg("num_ecu"),
@@ -326,6 +383,7 @@ void algo_bind(py::module_ &m) {
     py::arg("MessageVector"),
     py::arg("Bridge_Limit") = 3,
     py::arg("link_build_cost") = 2,
+    py::arg("yens_kmax") = 20,
     py::arg("assignment_type") = 0,
     py::arg("verbose") = 0,
     py::arg("debug_print") = 0);
