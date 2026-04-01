@@ -34,7 +34,7 @@
 			{
 				"command" : 3,
 				"file" : 3,
-				"line" : 17,
+				"line" : 19,
 				"parent" : 0
 			},
 			{
@@ -111,7 +111,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -std=gnu++17 -fvisibility=hidden"
+					"fragment" : "-g1 -std=gnu++17 -fvisibility=hidden"
 				}
 			],
 			"defines" : 

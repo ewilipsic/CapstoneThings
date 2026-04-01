@@ -7,11 +7,12 @@
 		[
 			"add_library",
 			"include",
-			"find_package"
+			"find_package",
+			"set_property"
 		],
 		"files" : 
 		[
-			"C:/Python312/Lib/site-packages/pybind11/share/cmake/pybind11/pybind11Targets.cmake",
+			"C:/Python312/Lib/site-packages/pybind11/share/cmake/pybind11/pybind11Common.cmake",
 			"C:/Python312/Lib/site-packages/pybind11/share/cmake/pybind11/pybind11Config.cmake",
 			"CMakeLists.txt"
 		],
@@ -23,7 +24,7 @@
 			{
 				"command" : 2,
 				"file" : 2,
-				"line" : 13,
+				"line" : 15,
 				"parent" : 0
 			},
 			{
@@ -33,7 +34,7 @@
 			{
 				"command" : 1,
 				"file" : 1,
-				"line" : 250,
+				"line" : 257,
 				"parent" : 2
 			},
 			{
@@ -43,7 +44,13 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 59,
+				"line" : 71,
+				"parent" : 4
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 72,
 				"parent" : 4
 			}
 		]
@@ -53,10 +60,24 @@
 		"major" : 2,
 		"minor" : 9
 	},
-	"id" : "pybind11::pybind11_headers::@6890427a1f51a3e7e1df",
+	"id" : "pybind11::embed::@6890427a1f51a3e7e1df",
 	"imported" : true,
+	"interfaceCompileDependencies" : 
+	[
+		{
+			"backtrace" : 6,
+			"id" : "pybind11::pybind11::@6890427a1f51a3e7e1df"
+		}
+	],
+	"interfaceLinkLibraries" : 
+	[
+		{
+			"backtrace" : 6,
+			"id" : "pybind11::pybind11::@6890427a1f51a3e7e1df"
+		}
+	],
 	"local" : true,
-	"name" : "pybind11::pybind11_headers",
+	"name" : "pybind11::embed",
 	"paths" : 
 	{
 		"build" : ".",

@@ -1,6 +1,6 @@
 {
 	"abstract" : true,
-	"backtrace" : 7,
+	"backtrace" : 5,
 	"backtraceGraph" : 
 	{
 		"commands" : 
@@ -11,7 +11,6 @@
 		],
 		"files" : 
 		[
-			"C:/Python312/Lib/site-packages/pybind11/share/cmake/pybind11/pybind11NewTools.cmake",
 			"C:/Python312/Lib/site-packages/pybind11/share/cmake/pybind11/pybind11Common.cmake",
 			"C:/Python312/Lib/site-packages/pybind11/share/cmake/pybind11/pybind11Config.cmake",
 			"CMakeLists.txt"
@@ -19,43 +18,33 @@
 		"nodes" : 
 		[
 			{
-				"file" : 3
+				"file" : 2
 			},
 			{
 				"command" : 2,
-				"file" : 3,
-				"line" : 13,
+				"file" : 2,
+				"line" : 15,
 				"parent" : 0
 			},
 			{
-				"file" : 2,
+				"file" : 1,
 				"parent" : 1
 			},
 			{
 				"command" : 1,
-				"file" : 2,
+				"file" : 1,
 				"line" : 257,
 				"parent" : 2
 			},
 			{
-				"file" : 1,
-				"parent" : 3
-			},
-			{
-				"command" : 1,
-				"file" : 1,
-				"line" : 202,
-				"parent" : 4
-			},
-			{
 				"file" : 0,
-				"parent" : 5
+				"parent" : 3
 			},
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 224,
-				"parent" : 6
+				"line" : 426,
+				"parent" : 4
 			}
 		]
 	},
@@ -64,10 +53,10 @@
 		"major" : 2,
 		"minor" : 9
 	},
-	"id" : "pybind11::python_headers::@6890427a1f51a3e7e1df",
+	"id" : "pybind11::lto::@6890427a1f51a3e7e1df",
 	"imported" : true,
 	"local" : true,
-	"name" : "pybind11::python_headers",
+	"name" : "pybind11::lto",
 	"paths" : 
 	{
 		"build" : ".",

@@ -2,14 +2,53 @@
 #include"yens.hpp"
 using namespace std;
 
-int assignMessage(Message& msg,vector<int>& route,int start_time,int end_time,map<pair<int,int>,set<int>>& S,int& departure_time,int hyperperiod,int assignment_type = 0){
+int assignMessage(Message& msg,vector<int>& route,int start_time,int end_time,map<pair<int,int>,set<int>>& S,int& departure_time,int hyperperiod,vector<float>& point_array,int assignment_type = 0){
     /*
         up in the schedule means time is increasing
         assignment type = 0 First Fit
         assignment type = 1 Best Fit Minimize fragmentation by 
             first: minizing sum of min (free time above) and min (free time below) the route
             second: maximizing the difference between min (free time above) and min (free time below) the route
+
+        asignment type = 2, weighted based on periods.
     */
+
+    if(assignment_type == 2){
+    int best_time = -1;
+    float best_points = -1;
+
+    for(int t = start_time;t <= end_time;t++){
+        int tflag = 1;
+        float points = 0;
+        for(int i = 0;i<(int)route.size()-1;i++){
+
+            int u = (route[i] < route[i+1]) ? route[i] : route[i+1];
+            int v = (route[i] < route[i+1]) ? route[i+1] : route[i];
+            points += point_array[t + i];
+            for(int lt = t + i;lt < t + i + msg.size ; lt++){
+                if(lt > end_time) tflag = 0;
+                if(S[{u,v}].count(lt)) tflag = 0;
+            }
+        }
+       
+        if(tflag && points > best_points){
+            best_points = points;
+            best_time = t;
+        }
+    }
+
+    if(best_time == -1) return 0;
+    departure_time = best_time;
+    for(int i = 0;i<(int)route.size()-1;i++){
+        int u = (route[i] < route[i+1]) ? route[i] : route[i+1];
+        int v = (route[i] < route[i+1]) ? route[i+1] : route[i];
+        for(int lt = best_time + i;lt < best_time + i + msg.size ; lt++){
+            S[{u,v}].insert(lt);
+        }
+    }
+
+    return 1;
+    }
 
     if(assignment_type == 1){
     int best_time = -1;
@@ -165,12 +204,29 @@ AlgoResults algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_limit,
         if(m1.period != m2.period) return m1.period < m2.period;
         return m1.size > m2.size;
     });
+    
+    set<int> unique_periods;
+    for(Message m : M) unique_periods.insert(m.period);
+
+    // points for assign type 2
+    vector<float> point_array(hyper_period,0);
+    for(int p : unique_periods){
+        for(int rep = 0;rep < hyper_period/p;rep++){
+            int start_time = 0 + rep * p;
+            int end_time = 0 + rep * p + p - 1;
+
+            for(int idx = start_time; idx <= end_time; idx++){
+                float dist_from_center = p/2.0 - min(end_time - idx, idx - start_time);
+                point_array[idx] += (dist_from_center * dist_from_center) / (p/2.0);
+            }
+        }
+    }
 
     vector<vector<int>> amount_sent(M.size());
     for(int i = 0;i<M.size();i++){
         amount_sent[i] = vector<int>(repeats[i],0);
     }
-    
+
     map<pair<int,int>,vector<vector<int>>> R; // pair(sorted msgidx,rep) -> routes
     map<pair<int,int>,vector<int>> departure_times; // pair(sorted msgidx,rep) -> depatrues of each disjoint
     map<pair<int,int>,set<int>> S; // link(u,v) u < v -> set of times where it is occupied
@@ -225,7 +281,7 @@ AlgoResults algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_limit,
                 }
                 
                 // print_vec(A);
-                flag = assignMessage(M[msg],A,start_time,end_time,S,departure_time,hyper_period,assignment_type);
+                flag = assignMessage(M[msg],A,start_time,end_time,S,departure_time,hyper_period,point_array,assignment_type);
             }
 
             // No paths left therefore no other disjoint paths exist
@@ -288,7 +344,7 @@ AlgoResults algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_limit,
         }
     }
     
-    AlgoResults ret = {hyper_period,repeats,amount_sent,R,departure_times,W,topologyCost};
+    AlgoResults ret = {hyper_period,repeats,amount_sent,R,departure_times,W,point_array,topologyCost};
     if(debug_print) cout<<"ALGO OUT"<<endl;
     return ret;
     
@@ -324,7 +380,7 @@ AlgoResults holistic_algo(int num_ecu,int num_bridges,vector<Message> M,int Brid
     for(int i = 0;i<M.size();i++){
         repeats[i] = hyper_period/M[i].period;
     }
-    
+
     vector<Holistic_MessageWrapper> Holistic_Order;
     for(int msg = 0;msg <M.size();msg++){
         for(int rep = 0;rep < repeats[msg];rep++){
@@ -334,6 +390,23 @@ AlgoResults holistic_algo(int num_ecu,int num_bridges,vector<Message> M,int Brid
         }
     }
     std::sort(Holistic_Order.begin(),Holistic_Order.end(),compareHolistic_MessageWrapper);
+
+    set<int> unique_periods;
+    for(Message m : M) unique_periods.insert(m.period);
+
+    // points for assign type 2
+    vector<float> point_array(hyper_period,0);
+    for(int p : unique_periods){
+        for(int rep = 0;rep < hyper_period/p;rep++){
+            int start_time = 0 + rep * p;
+            int end_time = 0 + rep * p + p - 1;
+
+            for(int idx = start_time; idx <= end_time; idx++){
+                float dist_from_center = p/2.0 - min(end_time - idx, idx - start_time);
+                point_array[idx] += (dist_from_center * dist_from_center) / (p/2.0);
+            }
+        }
+    }
 
     vector<vector<int>> amount_sent(M.size());
     for(int i = 0;i<M.size();i++){
@@ -391,7 +464,7 @@ AlgoResults holistic_algo(int num_ecu,int num_bridges,vector<Message> M,int Brid
                 }
                 
                 // print_vec(A);
-                flag = assignMessage(M[msg],A,start_time,end_time,S,departure_time,hyper_period,assignment_type);
+                flag = assignMessage(M[msg],A,start_time,end_time,S,departure_time,hyper_period,point_array,assignment_type);
             }
 
             // No paths left therefore no other disjoint paths exist
@@ -454,7 +527,7 @@ AlgoResults holistic_algo(int num_ecu,int num_bridges,vector<Message> M,int Brid
         }
     }
     
-    AlgoResults ret = {hyper_period,repeats,amount_sent,R,departure_times,W,topologyCost};
+    AlgoResults ret = {hyper_period,repeats,amount_sent,R,departure_times,W,point_array,topologyCost};
     if(debug_print) cout<<"ALGO OUT"<<endl;
     return ret;
     
@@ -462,6 +535,7 @@ AlgoResults holistic_algo(int num_ecu,int num_bridges,vector<Message> M,int Brid
 
 void algo_bind(py::module_ &m) {
     py::bind_vector<std::vector<int>>(m, "VectorInt");
+    py::bind_vector<std::vector<float>>(m, "VectorFloat");
     py::bind_vector<std::vector<std::vector<int>>>(m, "VectorVectorInt");
     py::bind_map<std::map<std::pair<int,int>,std::vector<std::vector<int>>>>(m,"Routes");
     py::bind_map<std::map<std::pair<int,int>,std::vector<int>>>(m,"DepartureTimes");
@@ -473,6 +547,7 @@ void algo_bind(py::module_ &m) {
         .def_readwrite("R", &AlgoResults::R)
         .def_readwrite("departure_times", &AlgoResults::departure_times)
         .def_readwrite("W", &AlgoResults::W)
+        .def_readwrite("point_array", &AlgoResults::point_array)
         .def_readwrite("Cost", &AlgoResults::Cost);
 
     m.def("algo", [](int num_ecu, int num_bridges, vector<Message> M, 

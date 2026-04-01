@@ -1,3 +1,3 @@
 "C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\tsn.dir/objects.a
 C:\msys64\ucrt64\bin\ar.exe qc CMakeFiles\tsn.dir/objects.a @CMakeFiles\tsn.dir\objects1.rsp
-C:\msys64\ucrt64\bin\g++.exe -g -shared -o tsn.cp312-win_amd64.pyd -Wl,--major-image-version,0,--minor-image-version,0 -Wl,--whole-archive CMakeFiles\tsn.dir/objects.a -Wl,--no-whole-archive @CMakeFiles\tsn.dir\linkLibs.rsp
+C:\msys64\ucrt64\bin\g++.exe -g1 -shared -o tsn.cp312-win_amd64.pyd -Wl,--major-image-version,0,--minor-image-version,0 -Wl,--whole-archive CMakeFiles\tsn.dir/objects.a -Wl,--no-whole-archive @CMakeFiles\tsn.dir\linkLibs.rsp
