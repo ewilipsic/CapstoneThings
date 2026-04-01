@@ -17,4 +17,16 @@ find_package(pybind11 REQUIRED)
 # Build Python extension module
 # pybind11_add_module(example example.cpp)
 pybind11_add_module(tsn binding.cpp make_inputs.cpp algo.cpp yens.cpp)
+# 1. Force Release build to drop the massive debug symbols (Highly Recommended)
+set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
 
+# 2. Add "big object" support based on your compiler
+if (MSVC)
+    target_compile_options(tsn PRIVATE /bigobj)
+elseif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    # For MinGW / GCC / Clang
+    target_compile_options(tsn PRIVATE -Wa,-mbig-obj)
+    
+    # Force strip debug symbols specifically for the target if Release type isn't enough
+    target_compile_options(tsn PRIVATE -g0) 
+endif()

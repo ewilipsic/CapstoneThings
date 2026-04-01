@@ -6,5 +6,5 @@ CXX_DEFINES = -DPy_NO_LINK_LIB -Dtsn_EXPORTS
 
 CXX_INCLUDES = @CMakeFiles/tsn.dir/includes_CXX.rsp
 
-CXX_FLAGS = -g1 -std=gnu++17 -fvisibility=hidden
+CXX_FLAGS = -O3 -DNDEBUG -std=gnu++17 -fvisibility=hidden -Wa,-mbig-obj -g0
 

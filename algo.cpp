@@ -194,10 +194,6 @@ AlgoResults algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_limit,
     int hyper_period = 1;
     for(int i = 0;i<M.size();i++) hyper_period = lcm(hyper_period,M[i].period);
     if(verbose) cout<<"Hyper Period: "<<hyper_period<<endl;
-    vector<int> repeats(M.size(),1);
-    for(int i = 0;i<M.size();i++){
-        repeats[i] = hyper_period/M[i].period;
-    }
     
     sort(M.begin(),M.end(),
     [&](const Message& m1,const Message& m2){
@@ -205,6 +201,11 @@ AlgoResults algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_limit,
         return m1.size > m2.size;
     });
     
+    vector<int> repeats(M.size(),1);
+    for(int i = 0;i<M.size();i++){
+        repeats[i] = hyper_period/M[i].period;
+    }
+
     set<int> unique_periods;
     for(Message m : M) unique_periods.insert(m.period);
 
@@ -217,7 +218,9 @@ AlgoResults algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_limit,
 
             for(int idx = start_time; idx <= end_time; idx++){
                 float dist_from_center = p/2.0 - min(end_time - idx, idx - start_time);
-                point_array[idx] += (dist_from_center * dist_from_center) / (p/2.0);
+                
+                // Cubing the distance and dividing by (p/2.0)^2 to maintain the same peak magnitude
+                point_array[idx] += (dist_from_center * dist_from_center * dist_from_center) / ((p/2.0) * (p/2.0));
             }
         }
     }
@@ -376,11 +379,12 @@ AlgoResults holistic_algo(int num_ecu,int num_bridges,vector<Message> M,int Brid
     int hyper_period = 1;
     for(int i = 0;i<M.size();i++) hyper_period = lcm(hyper_period,M[i].period);
     if(verbose) cout<<"Hyper Period: "<<hyper_period<<endl;
+
     vector<int> repeats(M.size(),1);
     for(int i = 0;i<M.size();i++){
         repeats[i] = hyper_period/M[i].period;
     }
-
+    
     vector<Holistic_MessageWrapper> Holistic_Order;
     for(int msg = 0;msg <M.size();msg++){
         for(int rep = 0;rep < repeats[msg];rep++){
@@ -390,6 +394,7 @@ AlgoResults holistic_algo(int num_ecu,int num_bridges,vector<Message> M,int Brid
         }
     }
     std::sort(Holistic_Order.begin(),Holistic_Order.end(),compareHolistic_MessageWrapper);
+    
 
     set<int> unique_periods;
     for(Message m : M) unique_periods.insert(m.period);
@@ -403,7 +408,9 @@ AlgoResults holistic_algo(int num_ecu,int num_bridges,vector<Message> M,int Brid
 
             for(int idx = start_time; idx <= end_time; idx++){
                 float dist_from_center = p/2.0 - min(end_time - idx, idx - start_time);
-                point_array[idx] += (dist_from_center * dist_from_center) / (p/2.0);
+                
+                // Cubing the distance and dividing by (p/2.0)^2 to maintain the same peak magnitude
+                point_array[idx] += (dist_from_center * dist_from_center * dist_from_center * dist_from_center) / ((p/2.0) * (p/2.0) * (p/2.0));
             }
         }
     }

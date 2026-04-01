@@ -1,25 +1,25 @@
 [
 {
   "directory": "C:/Users/ayush/OneDrive/Desktop/pybind_test/build",
-  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DPy_NO_LINK_LIB -Dtsn_EXPORTS @CMakeFiles/tsn.dir/includes_CXX.rsp -g1 -std=gnu++17 -fvisibility=hidden -o CMakeFiles\\tsn.dir\\binding.cpp.obj -c C:\\Users\\ayush\\OneDrive\\Desktop\\pybind_test\\binding.cpp",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DPy_NO_LINK_LIB -Dtsn_EXPORTS @CMakeFiles/tsn.dir/includes_CXX.rsp -O3 -DNDEBUG -std=gnu++17 -fvisibility=hidden -Wa,-mbig-obj -g0 -o CMakeFiles\\tsn.dir\\binding.cpp.obj -c C:\\Users\\ayush\\OneDrive\\Desktop\\pybind_test\\binding.cpp",
   "file": "C:/Users/ayush/OneDrive/Desktop/pybind_test/binding.cpp",
   "output": "CMakeFiles/tsn.dir/binding.cpp.obj"
 },
 {
   "directory": "C:/Users/ayush/OneDrive/Desktop/pybind_test/build",
-  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DPy_NO_LINK_LIB -Dtsn_EXPORTS @CMakeFiles/tsn.dir/includes_CXX.rsp -g1 -std=gnu++17 -fvisibility=hidden -o CMakeFiles\\tsn.dir\\make_inputs.cpp.obj -c C:\\Users\\ayush\\OneDrive\\Desktop\\pybind_test\\make_inputs.cpp",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DPy_NO_LINK_LIB -Dtsn_EXPORTS @CMakeFiles/tsn.dir/includes_CXX.rsp -O3 -DNDEBUG -std=gnu++17 -fvisibility=hidden -Wa,-mbig-obj -g0 -o CMakeFiles\\tsn.dir\\make_inputs.cpp.obj -c C:\\Users\\ayush\\OneDrive\\Desktop\\pybind_test\\make_inputs.cpp",
   "file": "C:/Users/ayush/OneDrive/Desktop/pybind_test/make_inputs.cpp",
   "output": "CMakeFiles/tsn.dir/make_inputs.cpp.obj"
 },
 {
   "directory": "C:/Users/ayush/OneDrive/Desktop/pybind_test/build",
-  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DPy_NO_LINK_LIB -Dtsn_EXPORTS @CMakeFiles/tsn.dir/includes_CXX.rsp -g1 -std=gnu++17 -fvisibility=hidden -o CMakeFiles\\tsn.dir\\algo.cpp.obj -c C:\\Users\\ayush\\OneDrive\\Desktop\\pybind_test\\algo.cpp",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DPy_NO_LINK_LIB -Dtsn_EXPORTS @CMakeFiles/tsn.dir/includes_CXX.rsp -O3 -DNDEBUG -std=gnu++17 -fvisibility=hidden -Wa,-mbig-obj -g0 -o CMakeFiles\\tsn.dir\\algo.cpp.obj -c C:\\Users\\ayush\\OneDrive\\Desktop\\pybind_test\\algo.cpp",
   "file": "C:/Users/ayush/OneDrive/Desktop/pybind_test/algo.cpp",
   "output": "CMakeFiles/tsn.dir/algo.cpp.obj"
 },
 {
   "directory": "C:/Users/ayush/OneDrive/Desktop/pybind_test/build",
-  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DPy_NO_LINK_LIB -Dtsn_EXPORTS @CMakeFiles/tsn.dir/includes_CXX.rsp -g1 -std=gnu++17 -fvisibility=hidden -o CMakeFiles\\tsn.dir\\yens.cpp.obj -c C:\\Users\\ayush\\OneDrive\\Desktop\\pybind_test\\yens.cpp",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe -DPy_NO_LINK_LIB -Dtsn_EXPORTS @CMakeFiles/tsn.dir/includes_CXX.rsp -O3 -DNDEBUG -std=gnu++17 -fvisibility=hidden -Wa,-mbig-obj -g0 -o CMakeFiles\\tsn.dir\\yens.cpp.obj -c C:\\Users\\ayush\\OneDrive\\Desktop\\pybind_test\\yens.cpp",
   "file": "C:/Users/ayush/OneDrive/Desktop/pybind_test/yens.cpp",
   "output": "CMakeFiles/tsn.dir/yens.cpp.obj"
 }

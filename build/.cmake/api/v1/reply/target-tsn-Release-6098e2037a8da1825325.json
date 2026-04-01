@@ -17,7 +17,8 @@
 			"__Python3_add_library",
 			"python3_add_library",
 			"pybind11_add_module",
-			"target_link_libraries"
+			"target_link_libraries",
+			"target_compile_options"
 		],
 		"files" : 
 		[
@@ -78,6 +79,18 @@
 				"file" : 2,
 				"line" : 324,
 				"parent" : 1
+			},
+			{
+				"command" : 5,
+				"file" : 3,
+				"line" : 28,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 3,
+				"line" : 31,
+				"parent" : 0
 			}
 		]
 	},
@@ -111,7 +124,15 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g1 -std=gnu++17 -fvisibility=hidden"
+					"fragment" : "-O3 -DNDEBUG -std=gnu++17 -fvisibility=hidden"
+				},
+				{
+					"backtrace" : 9,
+					"fragment" : "-Wa,-mbig-obj"
+				},
+				{
+					"backtrace" : 10,
+					"fragment" : "-g0"
 				}
 			],
 			"defines" : 
