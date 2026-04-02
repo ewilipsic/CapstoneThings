@@ -16,7 +16,7 @@ find_package(pybind11 REQUIRED)
 
 # Build Python extension module
 # pybind11_add_module(example example.cpp)
-pybind11_add_module(tsn binding.cpp make_inputs.cpp algo.cpp yens.cpp)
+pybind11_add_module(tsn binding.cpp make_inputs.cpp algo.cpp yens.cpp new_algo.cpp)
 # 1. Force Release build to drop the massive debug symbols (Highly Recommended)
 set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
 

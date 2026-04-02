@@ -11,6 +11,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/Users/ayush/OneDrive/Desktop/pybind_test/algo.cpp" "CMakeFiles/tsn.dir/algo.cpp.obj" "gcc" "CMakeFiles/tsn.dir/algo.cpp.obj.d"
   "C:/Users/ayush/OneDrive/Desktop/pybind_test/binding.cpp" "CMakeFiles/tsn.dir/binding.cpp.obj" "gcc" "CMakeFiles/tsn.dir/binding.cpp.obj.d"
   "C:/Users/ayush/OneDrive/Desktop/pybind_test/make_inputs.cpp" "CMakeFiles/tsn.dir/make_inputs.cpp.obj" "gcc" "CMakeFiles/tsn.dir/make_inputs.cpp.obj.d"
+  "C:/Users/ayush/OneDrive/Desktop/pybind_test/new_algo.cpp" "CMakeFiles/tsn.dir/new_algo.cpp.obj" "gcc" "CMakeFiles/tsn.dir/new_algo.cpp.obj.d"
   "C:/Users/ayush/OneDrive/Desktop/pybind_test/yens.cpp" "CMakeFiles/tsn.dir/yens.cpp.obj" "gcc" "CMakeFiles/tsn.dir/yens.cpp.obj.d"
   )
 

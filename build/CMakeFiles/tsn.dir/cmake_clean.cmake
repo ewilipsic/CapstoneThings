@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/tsn.dir/binding.cpp.obj.d"
   "CMakeFiles/tsn.dir/make_inputs.cpp.obj"
   "CMakeFiles/tsn.dir/make_inputs.cpp.obj.d"
+  "CMakeFiles/tsn.dir/new_algo.cpp.obj"
+  "CMakeFiles/tsn.dir/new_algo.cpp.obj.d"
   "CMakeFiles/tsn.dir/yens.cpp.obj"
   "CMakeFiles/tsn.dir/yens.cpp.obj.d"
   "libtsn.dll.a"

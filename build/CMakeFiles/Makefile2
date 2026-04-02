@@ -84,12 +84,12 @@ clean: CMakeFiles/tsn.dir/clean
 CMakeFiles/tsn.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\tsn.dir\build.make CMakeFiles/tsn.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\tsn.dir\build.make CMakeFiles/tsn.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\ayush\OneDrive\Desktop\pybind_test\build\CMakeFiles --progress-num=1,2,3,4,5 "Built target tsn"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\ayush\OneDrive\Desktop\pybind_test\build\CMakeFiles --progress-num=1,2,3,4,5,6 "Built target tsn"
 .PHONY : CMakeFiles/tsn.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/tsn.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\ayush\OneDrive\Desktop\pybind_test\build\CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\ayush\OneDrive\Desktop\pybind_test\build\CMakeFiles 6
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/tsn.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\ayush\OneDrive\Desktop\pybind_test\build\CMakeFiles 0
 .PHONY : CMakeFiles/tsn.dir/rule
@@ -101,7 +101,7 @@ tsn: CMakeFiles/tsn.dir/rule
 # codegen rule for target.
 CMakeFiles/tsn.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\tsn.dir\build.make CMakeFiles/tsn.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\ayush\OneDrive\Desktop\pybind_test\build\CMakeFiles --progress-num=1,2,3,4,5 "Finished codegen for target tsn"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\ayush\OneDrive\Desktop\pybind_test\build\CMakeFiles --progress-num=1,2,3,4,5,6 "Finished codegen for target tsn"
 .PHONY : CMakeFiles/tsn.dir/codegen
 
 # clean rule for target.

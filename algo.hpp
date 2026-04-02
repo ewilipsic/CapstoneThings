@@ -11,6 +11,16 @@
 #include <algorithm>
 #include <queue>
 #include <cstdint>
+#include<string>
+#include<vector>
+#include<map>
+#include<set>
+#include<iostream>
+#include<algorithm>
+#include<numeric>
+#include <iomanip>
+#include<unordered_map>
+#include<cstdint>
 #include <string>
 
 #include"message.hpp"
@@ -35,4 +45,8 @@ PYBIND11_MAKE_OPAQUE(std::vector<float>)
 PYBIND11_MAKE_OPAQUE(std::vector<std::vector<int>>)
 PYBIND11_MAKE_OPAQUE(std::map<std::pair<int,int>,std::vector<std::vector<int>>>)
 PYBIND11_MAKE_OPAQUE(std::map<std::pair<int,int>,std::vector<int>>)
+
+int nextUpgradeCost(int rank);
+int CumulativeUpgradeCost(int rank);
 void algo_bind(py::module_ &m);
+void new_algo_bind(py::module_ &m);

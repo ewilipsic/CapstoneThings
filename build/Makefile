@@ -200,6 +200,30 @@ make_inputs.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\tsn.dir\build.make CMakeFiles/tsn.dir/make_inputs.cpp.s
 .PHONY : make_inputs.cpp.s
 
+new_algo.obj: new_algo.cpp.obj
+.PHONY : new_algo.obj
+
+# target to build an object file
+new_algo.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\tsn.dir\build.make CMakeFiles/tsn.dir/new_algo.cpp.obj
+.PHONY : new_algo.cpp.obj
+
+new_algo.i: new_algo.cpp.i
+.PHONY : new_algo.i
+
+# target to preprocess a source file
+new_algo.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\tsn.dir\build.make CMakeFiles/tsn.dir/new_algo.cpp.i
+.PHONY : new_algo.cpp.i
+
+new_algo.s: new_algo.cpp.s
+.PHONY : new_algo.s
+
+# target to generate assembly for a file
+new_algo.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\tsn.dir\build.make CMakeFiles/tsn.dir/new_algo.cpp.s
+.PHONY : new_algo.cpp.s
+
 yens.obj: yens.cpp.obj
 .PHONY : yens.obj
 
@@ -242,6 +266,9 @@ help:
 	@echo ... make_inputs.obj
 	@echo ... make_inputs.i
 	@echo ... make_inputs.s
+	@echo ... new_algo.obj
+	@echo ... new_algo.i
+	@echo ... new_algo.s
 	@echo ... yens.obj
 	@echo ... yens.i
 	@echo ... yens.s

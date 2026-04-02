@@ -174,7 +174,8 @@
 				0,
 				1,
 				2,
-				3
+				3,
+				4
 			]
 		}
 	],
@@ -234,7 +235,8 @@
 				0,
 				1,
 				2,
-				3
+				3,
+				4
 			]
 		}
 	],
@@ -262,6 +264,12 @@
 			"backtrace" : 4,
 			"compileGroupIndex" : 0,
 			"path" : "yens.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "new_algo.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],
