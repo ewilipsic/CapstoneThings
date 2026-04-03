@@ -2,6 +2,25 @@
 using namespace std;
 
 // ----------------- in this file only ----------------------------
+
+bool look_forward_wrt_color(int node,int Next,int time_start,int size,int color,map< pair<int,int>, map< int, vector<pair<int,int>> > >& nexts){
+    // nexts
+    // (time,node) -> color -> vector cost,next node
+    int cur = Next;
+    int offset = 1;
+    while(offset < size){
+        if( !nexts.count({time_start + offset,cur}) || !nexts[{time_start + offset,cur}].count(color) || nexts[{time_start + offset,cur}][color].size() == 0) break;
+        int nextNode = nexts[{time_start + offset,cur}][color][0].second;
+        if(min(node,Next) == min(cur,nextNode) && max(node,Next) == max(cur,nextNode)){
+            return false;
+        }
+        cur = nextNode;
+        offset += 1;
+    }
+
+    return true;
+}
+
 AlgoResults my_algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_limit,int link_build_cost,int yens_kmax,int assignment_type,int verbose,int debug_print){
 
     int HOP_COST = 1;
@@ -70,6 +89,7 @@ AlgoResults my_algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_lim
             int new_color = 0;
 
             // thing go from u -> v
+            map<pair<int,int>,int> edgeColor;
             for(int v_time = end_time;v_time > start_time;v_time--){
                 // propagate downwards
                 for(int v = 0;v<n;v++){
@@ -125,11 +145,15 @@ AlgoResults my_algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_lim
                         auto [ min_cost_of_the_color ,color] = p;
                         if(colors_done >= tl){colors_to_remove.push_back(color);continue;}
 
-                        int next_to_use = -1;   
+                        int next_to_use = -1;
                         int next_to_use_cost = 0;
                         for(auto costNext : nexts[{v_time-1,u}][color]){
                             auto [cost_through_next ,Next] = costNext;
-                            if(!used_nodes.count(Next)) {next_to_use = Next; next_to_use_cost = cost_through_next;break;}
+                            if(!used_nodes.count(Next) && look_forward_wrt_color(u,Next,v_time-1,size,color,nexts) && (!edgeColor.count({min(u,Next),max(u,Next)}) || edgeColor[{min(u,Next),max(u,Next)}] == color)){
+                                next_to_use = Next;
+                                next_to_use_cost = cost_through_next;
+                                edgeColor[{min(u,Next),max(u,Next)}] = color;
+                            }
                         }
                         if(next_to_use != -1) {
                             nexts[{v_time-1,u}][color] = vector<pair<int,int>> {{next_to_use_cost,next_to_use}} ;
@@ -216,6 +240,7 @@ AlgoResults my_algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_lim
                 vector<int>& route = Rm[idx];
                 for(int i = 0;i<route.size()-1;i++){
                     for(int s = 0; s < size;s++) adj[departure_timesm[idx] + i + s][route[i]][route[i+1]] = 1;
+                    for(int s = 0; s < size;s++) adj[departure_timesm[idx] + i + s][route[i+1]][route[i]] = 1;
                     if(W[route[i]][route[i+1]] != HOP_COST) {node_rank[route[i]]++;node_rank[route[i+1]]++;}
                     W[route[i]][route[i+1]] = HOP_COST;
                     W[route[i+1]][route[i]] = HOP_COST;

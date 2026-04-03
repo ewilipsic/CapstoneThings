@@ -52,6 +52,23 @@ int CumulativeUpgradeCost(int rank){
 
 // ----------------- in this file only ----------------------------
 
+bool look_forward_wrt_color(int node,int Next,int time_start,int size,int color,map< pair<int,int>, map< int, vector<pair<int,int>> > >& nexts){
+    // nexts
+    // (time,node) -> color -> vector cost,next node
+    int cur = Next;
+    int offset = 1;
+    while(offset < size){
+        if( !nexts.count({time_start + offset,cur}) || !nexts[{time_start + offset,cur}].count(color) || nexts[{time_start + offset,cur}][color].size() == 0) break;
+        int nextNode = nexts[{time_start + offset,cur}][color][0].second;
+        if(min(node,Next) == min(cur,nextNode) && max(node,Next) == max(cur,nextNode)){
+            return false;
+        }
+        cur = nextNode;
+        offset += 1;
+    }
+
+    return true;
+}
 
 AlgoResults algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_limit,int link_build_cost,int yens_kmax,int assignment_type,int verbose,int debug_print){
 
@@ -112,8 +129,11 @@ AlgoResults algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_limit,
             map< pair<int,int>, map< int, vector<pair<int,int>> > > nexts;
             int new_color = 0;
 
+            map<pair<int,int>,int> edgeColor;
             // thing go from u -> v
             for(int v_time = end_time;v_time > start_time;v_time--){
+
+             
                 // propagate downwards
                 for(int v = 0;v<n;v++){
                     if(v == src) continue;
@@ -130,7 +150,7 @@ AlgoResults algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_limit,
                         }
                         continue;
                     }
-
+                
                     for(int u = 0;u<n;u++){
                         if(u == v || u == sink) continue;
                         int tflag = 1;
@@ -149,6 +169,7 @@ AlgoResults algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_limit,
                 }
 
                 // clarify nexts
+             
                 for(int u = 0;u<n;u++){
                     if(u == sink) continue;
         
@@ -172,7 +193,11 @@ AlgoResults algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_limit,
                         int next_to_use_cost = 0;
                         for(auto costNext : nexts[{v_time-1,u}][color]){
                             auto [cost_through_next ,Next] = costNext;
-                            if(!used_nodes.count(Next)) {next_to_use = Next; next_to_use_cost = cost_through_next;}
+                            if(!used_nodes.count(Next) && look_forward_wrt_color(u,Next,v_time-1,size,color,nexts) && (!edgeColor.count({min(u,Next),max(u,Next)}) || edgeColor[{min(u,Next),max(u,Next)}] == color)){
+                                next_to_use = Next;
+                                next_to_use_cost = cost_through_next;
+                                edgeColor[{min(u,Next),max(u,Next)}] = color;
+                            }
                         }
                         if(next_to_use != -1) {
                             nexts[{v_time-1,u}][color] = vector<pair<int,int>> {{next_to_use_cost,next_to_use}} ;
@@ -259,6 +284,7 @@ AlgoResults algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_limit,
                 vector<int>& route = Rm[idx];
                 for(int i = 0;i<route.size()-1;i++){
                     for(int s = 0; s < size;s++) adj[departure_timesm[idx] + i + s][route[i]][route[i+1]] = 1;
+                    for(int s = 0; s < size;s++) adj[departure_timesm[idx] + i + s][route[i+1]][route[i]] = 1;
                     if(W[route[i]][route[i+1]] != HOP_COST) {node_rank[route[i]]++;node_rank[route[i+1]]++;}
                     W[route[i]][route[i+1]] = HOP_COST;
                     W[route[i+1]][route[i]] = HOP_COST;
@@ -369,18 +395,20 @@ vector<Message> makeInputs(int num_ecu,
 }
 
 int main() {
+
+    int num_ecu = 4; 
+    int num_bridges =  2;
     // 1. Define inputs for makeInputs
-    int num_ecu = 4;
-    int num_bridges = 2;
-    int num_messages = 3;
+
+    int num_messages = 5;
     int base_period = 1;
-    std::vector<int> period_choice = {2, 3};
-    std::vector<double> period_choice_weights = {0.5, 0.3};
-    int min_size = 1;
-    int max_size = 1;
+    std::vector<int> period_choice = {5, 10};
+    std::vector<double> period_choice_weights = {0.7, 0.3};
+    int min_size = 3;
+    int max_size = 3;
     int min_tl = 2;
     int max_tl = 2;
-    int seed = 42;
+    int seed = 0;
 
     // 2. Generate Messages
     vector<Message> messages = makeInputs(
@@ -402,10 +430,10 @@ int main() {
 
     // 3. Define inputs for algo
     int Bridge_limit = 3;
-    int link_build_cost = 2;
+    int link_build_cost = 1;
     int yens_kmax = 5;
     int assignment_type = 1;
-    int verbose = 1;
+    int verbose = 0;
     int debug_print = 0;
 
     // 4. Run algo
