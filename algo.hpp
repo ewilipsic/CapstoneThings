@@ -33,6 +33,7 @@ typedef struct AlgoResults{
     std::map<std::pair<int,int>,std::vector<int>> departure_times; // pair(sorted msgidx,rep) -> depatrues of each disjoint
     std::vector<std::vector<int>> W;
     std::vector<float> point_array;
+    std::vector<Message> sorted_messages;
     int Cost;
 
 } AlgoResults;

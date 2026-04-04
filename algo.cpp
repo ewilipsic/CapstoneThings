@@ -24,8 +24,8 @@ int assignMessage(Message& msg,vector<int>& route,int start_time,int end_time,ma
 
             int u = (route[i] < route[i+1]) ? route[i] : route[i+1];
             int v = (route[i] < route[i+1]) ? route[i+1] : route[i];
-            points += point_array[t + i];
             for(int lt = t + i;lt < t + i + msg.size ; lt++){
+                points += point_array[lt];
                 if(lt > end_time) tflag = 0;
                 if(S[{u,v}].count(lt)) tflag = 0;
             }
@@ -347,7 +347,7 @@ AlgoResults algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_limit,
         }
     }
     
-    AlgoResults ret = {hyper_period,repeats,amount_sent,R,departure_times,W,point_array,topologyCost};
+    AlgoResults ret = {hyper_period,repeats,amount_sent,R,departure_times,W,point_array,M,topologyCost};
     if(debug_print) cout<<"ALGO OUT"<<endl;
     return ret;
     
@@ -534,7 +534,7 @@ AlgoResults holistic_algo(int num_ecu,int num_bridges,vector<Message> M,int Brid
         }
     }
     
-    AlgoResults ret = {hyper_period,repeats,amount_sent,R,departure_times,W,point_array,topologyCost};
+    AlgoResults ret = {hyper_period,repeats,amount_sent,R,departure_times,W,point_array,M,topologyCost};
     if(debug_print) cout<<"ALGO OUT"<<endl;
     return ret;
     
@@ -555,6 +555,7 @@ void algo_bind(py::module_ &m) {
         .def_readwrite("departure_times", &AlgoResults::departure_times)
         .def_readwrite("W", &AlgoResults::W)
         .def_readwrite("point_array", &AlgoResults::point_array)
+        .def_readwrite("sorted_messages", &AlgoResults::sorted_messages)
         .def_readwrite("Cost", &AlgoResults::Cost);
 
     m.def("algo", [](int num_ecu, int num_bridges, vector<Message> M, 

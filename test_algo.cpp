@@ -396,19 +396,20 @@ vector<Message> makeInputs(int num_ecu,
 
 int main() {
 
-    int num_ecu = 4; 
-    int num_bridges =  2;
+
+    int num_ecu = 8; 
+    int num_bridges =  4;
     // 1. Define inputs for makeInputs
 
     int num_messages = 5;
     int base_period = 1;
-    std::vector<int> period_choice = {5, 10};
-    std::vector<double> period_choice_weights = {0.7, 0.3};
-    int min_size = 3;
-    int max_size = 3;
+    std::vector<int> period_choice = {7,14,28};
+    std::vector<double> period_choice_weights = {0.5, 0.3,0.2};
+    int min_size = 2;
+    int max_size = 4;
     int min_tl = 2;
     int max_tl = 2;
-    int seed = 0;
+    int seed = 1;
 
     // 2. Generate Messages
     vector<Message> messages = makeInputs(
@@ -429,9 +430,9 @@ int main() {
     cout << "-----------------------" << endl;
 
     // 3. Define inputs for algo
-    int Bridge_limit = 3;
-    int link_build_cost = 1;
-    int yens_kmax = 5;
+    int Bridge_limit = 6;
+    int link_build_cost = 2;
+    int yens_kmax = 40;
     int assignment_type = 1;
     int verbose = 0;
     int debug_print = 0;

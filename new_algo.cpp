@@ -284,7 +284,7 @@ AlgoResults my_algo(int num_ecu,int num_bridges,vector<Message> M,int Bridge_lim
     topologyCost = topologyCost/2;
     for(int i = 0;i<num_ecu+num_bridges;i++) topologyCost += CumulativeUpgradeCost(node_rank[i]);
 
-    AlgoResults ret = {hyper_period,repeats,amount_sent,R,departure_times,W,{},topologyCost};
+    AlgoResults ret = {hyper_period,repeats,amount_sent,R,departure_times,W,{},M,topologyCost};
 
     return ret;
 
